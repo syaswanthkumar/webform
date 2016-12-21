@@ -3,8 +3,8 @@
 function barcodecheck_menu() {
   $items['barcodecheck/%'] = array(
     'title' => t('What is the barcode of your received package?'),
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('barcodecheck_form',1),
+    'page callback' => 'prerequesite_callback',
+    'page arguments' => array(1),
     'access callback' => true,
     'type'  => MENU_NORMAL_ITEM
   );
@@ -13,8 +13,6 @@ function barcodecheck_menu() {
 
 function barcodecheck_form($node, &$form_state,$variable) {
   
-  //3:parcel
-  if($variable == 3){
   $form['barcode'] = array(
     '#type' => 'textfield',
     '#title' => t('Fill in your barcode / tracer number in'),
@@ -44,16 +42,24 @@ function barcodecheck_form($node, &$form_state,$variable) {
   );
 
   
+  return $form;
+}
+
+function prerequesite_callback($variable){
+  $term_info = taxonomy_term_load($variable);
+  if(function_exists($term_info->field_function_name['und'][0]['value'])){
+  $formvalue = $term_info->field_function_name['und'][0]['value'];
+    if(!empty($formvalue)){
+      return drupal_get_form($formvalue,$variable);
+    }
+    else{
+      drupal_goto("problem-type/".$variable);
+    }
   }
   else{
-    drupal_set_title(t('No Functionality'));
-    $form['html'] = array(
-  '#type' => 'markup',
-  '#markup' => 'Type Functionality Not Defined',
-  
-);
+    drupal_goto("problem-type/".$variable);
   }
-  return $form;
+   
 }
 
 function barcodecheck_form_validate($form, &$form_state) {
