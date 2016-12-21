@@ -46,6 +46,7 @@ function barcodecheck_form($node, &$form_state,$variable) {
   
   }
   else{
+    drupal_set_title(t('No Functionality'));
     $form['html'] = array(
   '#type' => 'markup',
   '#markup' => 'Type Functionality Not Defined',
