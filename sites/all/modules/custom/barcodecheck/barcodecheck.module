@@ -1,17 +1,20 @@
 <?php
 
 function barcodecheck_menu() {
-  $items['barcodecheck/Parcels'] = array(
+  $items['barcodecheck/%'] = array(
     'title' => t('What is the barcode of your received package?'),
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('barcodecheck_form'),
+    'page arguments' => array('barcodecheck_form',1),
     'access callback' => true,
     'type'  => MENU_NORMAL_ITEM
   );
   return $items;
 }
 
-function barcodecheck_form($node, &$form_state) {
+function barcodecheck_form($node, &$form_state,$variable) {
+  
+  //3:parcel
+  if($variable == 3){
   $form['barcode'] = array(
     '#type' => 'textfield',
     '#title' => t('Fill in your barcode / tracer number in'),
@@ -22,6 +25,12 @@ function barcodecheck_form($node, &$form_state) {
       'method' => 'html',
       'effect' => 'fade',
     )
+  );
+  $form['term_id'] = array(
+    '#type' => 'hidden',
+    '#title' => t('Termid'),
+    '#required' => TRUE,
+    '#value' => $variable
   );
   $form['html'] = array(
   '#type' => 'markup',
@@ -34,6 +43,15 @@ function barcodecheck_form($node, &$form_state) {
     '#value' => t('Next'),
   );
 
+  
+  }
+  else{
+    $form['html'] = array(
+  '#type' => 'markup',
+  '#markup' => 'Type Functionality Not Defined',
+  
+);
+  }
   return $form;
 }
 
@@ -41,7 +59,7 @@ function barcodecheck_form_validate($form, &$form_state) {
 }
 
 function barcodecheck_form_submit($form, &$form_state) {
-  $form_state['redirect'] = 'faq';
+  $form_state['redirect'] = 'problem-type/'.$form_state['values']['term_id'];
 }
 
 function example_form_submit($form, &$form_state)
