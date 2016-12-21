@@ -1,0 +1,16 @@
+name = Webform Component Bundles
+description = Enables the creation of component bundles for Webform
+core = 7.x
+package = Webform
+
+dependencies[] = webform (4.x)
+
+version = "7.x-3.x"
+core = "7.x"
+
+; Information added by Drupal.org packaging script on 2016-01-29
+version = "7.x-4.0-beta1"
+core = "7.x"
+project = "webform_component_bundles"
+datestamp = "1454061845"
+
