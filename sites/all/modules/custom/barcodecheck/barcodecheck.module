@@ -41,6 +41,7 @@ function barcodecheck_form_validate($form, &$form_state) {
 }
 
 function barcodecheck_form_submit($form, &$form_state) {
+  $form_state['redirect'] = 'faq';
 }
 
 function example_form_submit($form, &$form_state)
