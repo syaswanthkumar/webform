@@ -1,0 +1,75 @@
+<?php
+
+
+/**
+ * @file
+ * Install hooks for quote management.
+ */
+function barcodecheck_schema() {
+$schema = array();
+  $schema['barcodes'] = array(
+    // Example (partial) specification for table "node".
+    'description' => 'Quote Products Table',
+    'fields' => array(
+      'barcode' => array(
+        'description' => 'The primary identifier for a table.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => ''
+      ),
+      'status' => array(
+        'description' => 'Status of the barcode',
+        'type' => 'varchar',
+        'length' => 30,
+		'not null' => TRUE,
+		'default' => ''
+        
+      ),
+      'date' => array(
+        'description' => 'Date of the barcode',
+        'type' => 'varchar',
+        'length' => 30,
+		'not null' => TRUE,
+		'default' => ''
+        
+		),
+	'destination' => array(
+       'description' => 'Where to deliver',
+       'type' => 'varchar',
+        'length' => 100,
+		'not null' => TRUE,
+		'default' => ''
+      
+	   ),
+	   'sender' => array(
+       'description' => 'Who is the sender',
+       'type' => 'varchar',
+        'length' => 50,
+		'not null' => TRUE,
+		'default' => ''
+       
+	   ),
+	   ),
+    
+  );
+	   return $schema;
+}
+/* function quote_install() {
+  drupal_install_schema('quote');
+  drupal_install_schema('quote_products');
+}  */
+
+function barcodecheck_uninstall() {
+  drupal_uninstall_schema('barcodes');
+  //drupal_uninstall_schema('quote_products');
+
+  // Clear the cache tables.
+  cache_clear_all('*', 'cache', TRUE);
+  cache_clear_all('*', 'cache_filter', TRUE);
+  cache_clear_all('*', 'cache_menu', TRUE);
+
+}
+	   
+	   
+	   

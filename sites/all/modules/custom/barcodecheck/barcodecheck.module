@@ -1,0 +1,77 @@
+<?php
+
+function barcodecheck_menu() {
+  $items['barcodecheck/Parcels'] = array(
+    'title' => t('What is the barcode of your received package?'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('barcodecheck_form'),
+    'access callback' => true,
+    'type'  => MENU_NORMAL_ITEM
+  );
+  return $items;
+}
+
+function barcodecheck_form($node, &$form_state) {
+  $form['barcode'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Fill in your barcode / tracer number in'),
+    '#required' => TRUE,
+    '#ajax' => array(
+      'callback' => 'example_form_submit',
+      'wrapper' => 'edit-submitted-postal-code',
+      'method' => 'html',
+      'effect' => 'fade',
+    )
+  );
+  $form['html'] = array(
+  '#type' => 'markup',
+  '#markup' => '<div id="edit-submitted-postal-code"></div>',
+  
+);
+  
+   $form['submit_button'] = array(
+    '#type' => 'submit',
+    '#value' => t('Next'),
+  );
+
+  return $form;
+}
+
+function barcodecheck_form_validate($form, &$form_state) {
+}
+
+function barcodecheck_form_submit($form, &$form_state) {
+}
+
+function example_form_submit($form, &$form_state)
+{
+    $result = db_query('SELECT n.status, n.date, n.destination, n.sender FROM {barcodes} n WHERE n.barcode = :pcode', array(':pcode' => $form_state['values']['barcode']))->fetchAll();
+    //drupal_set_message('<pre>' . print_r($form_state['values'], TRUE) . '</pre>'); 
+    $htmlcontent = "<div><h2>Gegevens Over uw packet</h2></div>";
+    $htmlcontent .= "<div><p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p></div>";
+    if(count($result)){
+      $htmlcontent .="<div><table><tbody>";
+      foreach ($result as $record) {
+          $data[] = array($record->barcode,$record->status);
+          $htmlcontent .="<tr><th>Status</th><td>".$record->status."</td></tr><tr><th>Date</th><td>".$record->date."</td></tr><tr><th>Destination</th><td>".$record->destination."</td></tr><tr><th>Sender</th><td>".$record->sender."</td></tr>";
+      }
+      $htmlcontent .="</tbody></table></div>";
+    }
+    else{
+      $htmlcontent .= "<font style='color:red;font-size:16px;'>Invalid Barcode</font>";
+      $data[] = array('No results found','');
+    }
+    
+    $header = array('Barcode', 'Status');
+    
+  $output = theme('table', 
+array('header' => $header, 
+                  'rows' => $data ));
+    
+    return $htmlcontent;
+}
+
+  
+
+
+

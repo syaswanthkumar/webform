@@ -1,0 +1,5 @@
+name = barcodecheck
+description = checking whether the entered barcode is valid or not
+core = 7.x
+package = barcode
+version = 7.x-1.0
